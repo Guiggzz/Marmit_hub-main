@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des ingrédients
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-auto px-6 py-10">
+		<h1 class="text-2xl font-bold text-orange-600 mb-6">Liste des ingrédients</h1>
+
+		{% if ingredients|length > 0 %}
+			<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+				{% for ingredient in ingredients %}
+					<div
+						class="bg-white shadow rounded-lg overflow-hidden">
+						<!-- Photo de l'ingrédient -->
+						{% if ingredient.photo %}
+							<img src="{{ asset('uploads/ingredients/' ~ ingredient.photo) }}" alt="{{ ingredient.nom }}" class="w-full h-64 object-cover">
+						{% else %}
+							<div class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-500">
+								Pas d'image
+							</div>
+						{% endif %}
+
+						<!-- Contenu de l'ingrédient -->
+						<div class="p-4">
+							<h2 class="text-lg font-semibold text-gray-800">{{ ingredient.nom }}</h2>
+							<!-- Bouton pour voir les détails -->
+							<div class="mt-4">
+								<a href="{{ path('app_ingredient_show', { id: ingredient.id }) }}" class="text-orange-600 hover:underline">
+									Voir plus
+								</a>
+							</div>
+							<!-- Bouton Modifier si l'utilisateur est le créateur -->
+							{% if ingredient.utilisateur == app.user %}
+								<div class="mt-2">
+									<a href="{{ path('app_ingredient_update', { id: ingredient.id }) }}" class="text-blue-600 hover:underline">
+										Modifier
+									</a>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<p class="text-gray-500">Aucun ingrédient disponible pour le moment.</p>
+		{% endif %}
+	</div>
+{% endblock %}

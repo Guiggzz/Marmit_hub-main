@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la recette -
+	{{ recette.nom }}
+{% endblock %}
+
+{% block body %}
+	{% if app.user %}
+		<div class="container mx-auto px-6 py-10">
+			<h1 class="text-2xl font-bold text-orange-600 mb-6">Modifier la recette -
+				{{ recette.nom }}</h1>
+
+			{{ form_start(form, {'attr': {'class': 'space-y-6', 'id': 'edit-recipe-form'}}) }}
+
+			<div class="form-group">
+				{{ form_label(form.nom, null, {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+				{{ form_widget(form.nom, {'attr': {'class': 'form-control w-full border border-gray-300 rounded-md p-2', 'value': recette.nom}}) }}
+				{{ form_errors(form.nom) }}
+			</div>
+
+			<div class="form-group">
+				{{ form_label(form.texte, null, {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+				{{ form_widget(form.texte, {'attr': {'class': 'form-control w-full border border-gray-300 rounded-md p-2', 'rows': 5, 'value': recette.texte}}) }}
+				{{ form_errors(form.texte) }}
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<div class="form-group">
+					{{ form_label(form.duree_totale, null, {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+					{{ form_errors(form.duree_totale) }}
+				</div>
+				<div class="form-group">
+					{{ form_label(form.nombre_personnes, null, {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+					{{ form_errors(form.nombre_personnes) }}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="block text-gray-700 font-semibold mb-2">Sélectionner les ingrédients</label>
+				<div class="space-y-2">
+					{% for ingredient in form.ingredients %}
+						<div class="flex items-center">
+							{{ form_widget(ingredient, {'checked': ingredient.vars.value in recette.ingredients|map(ingredient => ingredient.id)}) }}
+							<label class="ml-2">{{ ingredient.vars.label }}</label>
+						</div>
+					{% endfor %}
+				</div>
+				{{ form_errors(form.ingredients) }}
+			</div>
+
+			<div class="form-group">
+				{{ form_label(form.photo, null, {'label_attr': {'class': 'block text-gray-700 font-semibold mb-2'}}) }}
+				{{ form_widget(form.photo, {'attr': {'class': 'form-control-file', 'value': recette.photo}}) }}
+				{{ form_errors(form.photo) }}
+			</div>
+
+			{{ form_rest(form) }}
+
+			<button type="submit" class="btn bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-500 transition">
+				Modifier la recette
+			</button>
+			{{ form_end(form) }}
+		</div>
+
+		<!-- Popup Modal -->
+		<div id="success-popup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+			<div class="bg-white p-6 rounded-md shadow-lg max-w-sm mx-auto">
+				<h2 class="text-xl font-semibold text-green-600">Recette modifiée avec succès !</h2>
+				<p class="mt-4 text-gray-700">Votre recette a bien été mise à jour.</p>
+				<button id="close-popup" class="mt-4 bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-500">
+					Fermer
+				</button>
+			</div>
+		</div>
+
+	{% else %}
+		<script>
+			window.location.href = "{{ path('app_login') }}";
+		</script>
+	{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		// Fonction pour afficher le pop-up
+function showPopup() {
+const popup = document.getElementById('success-popup');
+popup.classList.remove('hidden');
+}
+
+// Cacher le pop-up lorsqu'on clique sur le bouton
+document.getElementById('close-popup').addEventListener('click', function () {
+const popup = document.getElementById('success-popup');
+popup.classList.add('hidden');
+});
+
+// Ajouter un gestionnaire d'événements pour la soumission du formulaire
+document.getElementById('edit-recipe-form').addEventListener('submit', function (event) {
+event.preventDefault();
+// Empêche le formulaire de se soumettre immédiatement
+// Afficher le pop-up
+showPopup();
+
+// Soumettre le formulaire après un délai de 2 secondes
+setTimeout(() => {
+this.submit(); // Soumettre le formulaire
+}, 2000); // Délai de 2 secondes
+});
+	</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Modifier l'ingrédient -
+	{{ ingredient.nom }}
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-auto px-6 py-10">
+		<h1 class="text-2xl font-bold text-orange-600 mb-6">Modifier l'ingrédient</h1>
+
+		{{ form_start(form) }}
+		{{ form_row(form.nom) }}
+		{{ form_row(form.photo) }}
+		<div class="mt-6">
+			<button type="submit" class="btn bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-500 transition">
+				Sauvegarder
+			</button>
+		</div>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

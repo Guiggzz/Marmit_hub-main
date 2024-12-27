@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<script src="https://cdn.tailwindcss.com"></script>
+		{% block stylesheets %}{% endblock %}
+	</head>
+
+	<body
+		class="bg-gray-100">
+		<!-- Header -->
+		<header class="bg-white shadow-md">
+			<div
+				class="container mx-auto flex justify-between items-center py-4 px-6">
+				<!-- Logo -->
+				<a href="/" class="text-orange-600 text-2xl font-bold">
+					Marmit-hub
+				</a>
+
+				<!-- Desktop Menu -->
+				<nav class="hidden md:flex space-x-6">
+					<a href="/recette/nouvelle" class="text-gray-700 hover:text-orange-600 transition">
+						Ajout de recette
+					</a>
+					<a href="/creation/ingredient" class="text-gray-700 hover:text-orange-600 transition">
+						Ajout d'ingrédient
+					</a>
+					<a href="/ingredients" class="text-gray-700 hover:text-orange-600 transition">
+						Liste d'ingrédients
+					</a>
+				</nav>
+
+				<!-- Icons + Menu Button for Mobile -->
+				<div class="flex items-center space-x-4">
+					<a href="/search" class="text-gray-700 hover:text-orange-600 text-xl transition">
+						🔍
+					</a>
+					<a href="/login" class="text-gray-700 hover:text-orange-600 text-xl transition">
+						👤
+					</a>
+					<!-- Mobile Menu Button -->
+					<button id="mobile-menu-button" class="md:hidden text-gray-700 hover:text-orange-600 text-2xl transition" aria-label="Menu">
+						☰
+					</button>
+				</div>
+			</div>
+
+			<div id="mobile-menu" class="md:hidden hidden">
+				<nav class="space-y-2 bg-gray-50 px-6 py-4">
+					<a href="/recette/nouvelle" class="block text-gray-700 hover:text-orange-600 transition">
+						Ajout de recette
+					</a>
+					<a href="/creation/ingredient" class="block text-gray-700 hover:text-orange-600 transition">
+						Ajout d'ingrédient
+					</a>
+					<a href="/ingredients" class="block text-gray-700 hover:text-orange-600 transition">
+						Liste d'ingrédients
+					</a>
+				</nav>
+			</div>
+		</header>
+
+		<main>
+			{% block body %}{% endblock %}
+		</main>
+
+		<script>
+			const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+
+mobileMenuButton.addEventListener('click', () => {
+mobileMenu.classList.toggle('hidden');
+});
+		</script>
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

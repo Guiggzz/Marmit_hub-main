@@ -1,0 +1,26 @@
+controllers:
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
+commentaire_add:
+  path: /commentaire/add/{recetteId}
+  controller: App\Controller\CommentaireController::addCommentaire
+  methods: POST
+
+commentaire_delete:
+  path: /commentaire/delete/{id}
+  controller: App\Controller\CommentaireController::deleteCommentaire
+  methods: POST
+
+recette_edit:
+  path: /recette/{id}/edit
+  controller: App\Controller\RecetteController::edit
+
+ingredient_edit:
+  path: /ingredient/{id}/edit
+  controller: App\Controller\IngredientController::edit
+
+app_ingredient_list:
+  path: /ingredients
+  controller: App\Controller\IngredientController::list

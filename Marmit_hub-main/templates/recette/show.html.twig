@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Recette -
+	{{ recette.nom }}
+{% endblock %}
+
+{% block body %}
+	<div
+		class="container mx-auto px-6 py-10">
+		<!-- Card principale -->
+		<div
+			class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+			<!-- Image en haut, en pleine largeur -->
+			{% if recette.photo %}
+				<div class="relative">
+					<img src="{{ asset('uploads/recettes/' ~ recette.photo) }}" alt="{{ recette.nom }}" class="w-full h-64 object-cover">
+					<div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+						<h1 class="text-4xl font-bold text-white drop-shadow-md">{{ recette.nom }}</h1>
+					</div>
+				</div>
+			{% endif %}
+
+			<!-- Contenu de la recette -->
+			<div class="p-6">
+				<div
+					class="flex flex-col space-y-4">
+					<!-- Texte de la recette -->
+					<p class="text-lg text-gray-700">{{ recette.texte }}</p>
+
+					<!-- Informations supplémentaires -->
+					<div class="flex items-center space-x-4">
+						<p class="text-gray-600 font-medium">Durée :</p>
+						<span class="text-orange-600 font-semibold">{{ recette.dureeTotale }}
+							minutes</span>
+					</div>
+					<div class="flex items-center space-x-4">
+						<p class="text-gray-600 font-medium">Pour :</p>
+						<span class="text-orange-600 font-semibold">{{ recette.nombrePersonnes }}
+							personne(s)</span>
+					</div>
+				</div>
+
+				<!-- Informations sur le créateur -->
+				<div class="mt-6">
+					<p class="text-lg text-gray-600 font-medium">Créateur :</p>
+					<p class="text-gray-800">{{ recette.utilisateur.username }}</p>
+				</div>
+
+				<!-- Liste des ingrédients -->
+				<div class="mt-10">
+					<h2 class="text-2xl font-semibold text-gray-800 mb-4">Ingrédients :</h2>
+					<ul class="space-y-2">
+						{% for ingredient in recette.ingredients %}
+							<li>
+								<a href="{{ path('app_ingredient_show', { id: ingredient.id }) }}" class="text-orange-600 hover:underline">
+									{{ ingredient.nom }}
+								</a>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<!-- Affichage des commentaires -->
+				<div class="mt-10">
+					<h2 class="text-2xl font-semibold text-gray-800 mb-4">Commentaires :</h2>
+					{% if recette.commentaires is not empty %}
+						<ul class="space-y-2">
+							{% for commentaire in recette.commentaires %}
+								<li>
+									<p class="text-gray-800">
+										<strong>{{ commentaire.utilisateur.username }}</strong>
+										-
+										{{ commentaire.date|date('d/m/Y H:i') }}
+									</p>
+									<p class="text-gray-600">{{ commentaire.texte }}</p>
+								</li>
+							{% endfor %}
+						</ul>
+					{% else %}
+						<p class="text-gray-500">Aucun commentaire pour cette recette pour l'instant.</p>
+					{% endif %}
+				</div>
+
+				<!-- Formulaire d'ajout de commentaire -->
+				{% if app.user %}
+					<div class="mt-6">
+						<form action="{{ path('commentaire_add', { 'recetteId': recette.id }) }}" method="POST">
+							<textarea name="texte" placeholder="Ajouter un commentaire" required></textarea>
+							<button type="submit">Envoyer</button>
+						</form>
+					</div>
+				{% else %}
+					<p class="mt-4 text-gray-600">Vous devez être connecté pour ajouter un commentaire.</p>
+				{% endif %}
+
+				<!-- Bouton de retour -->
+				<div class="mt-6">
+					<a href="{{ path('app_home') }}" class="btn bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-500 transition">
+						Retour à l'accueil
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

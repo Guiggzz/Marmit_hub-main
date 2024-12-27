@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche de recettes
+{% endblock %}
+
+{% block body %}
+	<div class="container mx-auto px-6 py-10">
+		<h1 class="text-2xl font-bold text-orange-600 mb-6">Recherche de recettes par ingrédients</h1>
+
+		{# Formulaire de recherche #}
+		<div class="mb-6">
+			<h2 class="text-lg font-semibold">Sélectionnez les ingrédients :</h2>
+			{{ form_start(form) }}
+			{{ form_widget(form) }}
+			<button type="submit" class="btn bg-orange-600 text-white px-6 py-3 rounded-md hover:bg-orange-500 transition mt-4">
+				Rechercher
+			</button>
+			{{ form_end(form) }}
+		</div>
+
+		{# Affichage des recettes #}
+		{% if recettes is not empty %}
+			<div class="mt-6">
+				<h2 class="text-2xl font-semibold text-gray-800 mb-4">Recettes trouvées :</h2>
+				<ul class="space-y-4">
+					{% for recette in recettes %}
+						<li class="bg-white shadow rounded-lg p-4">
+							<h3 class="text-xl font-bold text-gray-800">{{ recette.nom }}</h3>
+							<p class="text-sm text-gray-600">Pourcentage de disponibilité des ingrédients :
+								<span class="text-orange-600">{{ pourcentage[recette.id]|round(2) }}%</span>
+							</p>
+							<a href="{{ path('recette_show', {id: recette.id}) }}" class="text-orange-600 hover:underline mt-2 inline-block">Voir la recette</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% else %}
+			<p class="text-gray-500 mt-4">Aucune recette ne correspond à vos critères.</p>
+		{% endif %}
+	</div>
+{% endblock %}
